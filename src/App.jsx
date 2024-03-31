@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { app } from "./configs/firebase";
-import { onSnapshot, collection} from "firebase/firestore";
+import { onSnapshot, collection } from "firebase/firestore";
 import "./App.css";
 export default function Home() {
   const [data, setData] = useState([]);
-  const [stats, setStats] = useState({ l1: 0, l2: 0, l3: 0, l10: 0 });// completed level count; eg l3=atleast level 3 completed users
+  const [stats, setStats] = useState({ l1: 0, l2: 0, l3: 0, l10: 0 }); // completed level count; eg l3=atleast level 3 completed users
   const [searchKey, setSearchKey] = useState("");
 
-  useEffect(() => {                                                 //fetching data from firebase
+  useEffect(() => {
+    //fetching data from firebase
     const unsubscribe = onSnapshot(collection(app, "users"), (snapshot) => {
       const userData = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -18,31 +19,29 @@ export default function Home() {
 
     return () => unsubscribe();
   }, []);
-   
-  function countTrue(booleanArray) { //function to count the true values in level array
+
+  function countTrue(booleanArray) {
+    //function to count the true values in level array
     let count = 0;
     for (let i = 0; i < booleanArray.length; i++) {
-        if (booleanArray[i] === true) {
-            count++;
-        }
+      if (booleanArray[i] === true) {
+        count++;
+      }
     }
     return count;
-}
+  }
 
-  useEffect(() => {    //setting the stat count
+  useEffect(() => {
+    //setting the stat count
     let statCount1 = 0,
       statCount10 = 0;
     data.forEach((user) => {
-      if(countTrue(user.level)>=1)
-      statCount1++;
-      if(countTrue(user.level)>=10)
-      statCount10++;
-      
+      if (countTrue(user.level) >= 1) statCount1++;
+      if (countTrue(user.level) >= 10) statCount10++;
     });
     setStats({ ...stats, l1: statCount1, l10: statCount10 });
   }, [data]);
   return (
-  
     <>
       <nav>
         <a href="">Vote Ready</a>
@@ -68,13 +67,13 @@ export default function Home() {
           <div className="stat-box">
             <div>
               <h1>{(stats.l1 / data.length) * 100}%</h1>
-              <h2>Lvl 1 completed</h2>
+              <h2>1 level completed</h2>
             </div>
           </div>
           <div className="stat-box">
             <div>
               <h1>{(stats.l10 / data.length) * 100}%</h1>
-              <h2>Lvl 10 completed</h2>
+              <h2>10 level completed</h2>
             </div>
           </div>
         </div>
@@ -86,9 +85,9 @@ export default function Home() {
               <tr className="table-header">
                 <th>Name</th>
                 <th>Email</th>
-                <th>Current Level</th>
+                <th>Level Completed</th>
               </tr>
-              {data                                                 //filtering data based on search key
+              {data //filtering data based on search key
                 .filter(
                   (user) =>
                     user.username.toLowerCase().includes(searchKey) ||
