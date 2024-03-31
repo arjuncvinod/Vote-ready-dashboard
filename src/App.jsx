@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { app } from "./configs/firebase";
-import { onSnapshot, collection, count } from "firebase/firestore";
+import { onSnapshot, collection} from "firebase/firestore";
 import "./App.css";
 export default function Home() {
   const [data, setData] = useState([]);
-  const [stats, setStats] = useState({ l1: 0, l2: 0, l3: 0, l10: 0 });
+  const [stats, setStats] = useState({ l1: 0, l2: 0, l3: 0, l10: 0 });// completed level count; eg l3=atleast level 3 completed users
   const [searchKey, setSearchKey] = useState("");
 
-  useEffect(() => {
+  useEffect(() => {                                                 //fetching data from firebase
     const unsubscribe = onSnapshot(collection(app, "users"), (snapshot) => {
       const userData = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -18,36 +18,31 @@ export default function Home() {
 
     return () => unsubscribe();
   }, []);
-  useEffect(() => {
+   
+  function countTrue(booleanArray) { //function to count the true values in level array
+    let count = 0;
+    for (let i = 0; i < booleanArray.length; i++) {
+        if (booleanArray[i] === true) {
+            count++;
+        }
+    }
+    return count;
+}
+
+  useEffect(() => {    //setting the stat count
     let statCount1 = 0,
       statCount10 = 0;
     data.forEach((user) => {
-      if (Number(user.level) >= 1) {
-        statCount1++;
-      }
-      if (Number(user.level) >= 10) {
-        statCount10++;
-      }
+      if(countTrue(user.level)>=1)
+      statCount1++;
+      if(countTrue(user.level)>=10)
+      statCount10++;
+      
     });
     setStats({ ...stats, l1: statCount1, l10: statCount10 });
   }, [data]);
   return (
-    // <div>
-    //   <h1>User Details</h1>
-    //   <ul>
-    //     {data.map((user) => (
-    //       <li key={user.id}>
-    //         <strong>Name:</strong> {user.username}
-    //         <br />
-    //         <strong>Email:</strong> {user.email}
-    //         <br />
-    //         <strong>level:</strong> {user.level}
-    //         <br />
-    //       </li>
-    //     ))}
-    //   </ul>
-    // </div>
-
+  
     <>
       <nav>
         <a href="">Vote Ready</a>
@@ -83,7 +78,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <h1 className="heading">Users</h1>
+        <h1 className="heading">Presiding officers</h1>
 
         <div className="table-container">
           <table>
@@ -93,7 +88,7 @@ export default function Home() {
                 <th>Email</th>
                 <th>Current Level</th>
               </tr>
-              {data
+              {data                                                 //filtering data based on search key
                 .filter(
                   (user) =>
                     user.username.toLowerCase().includes(searchKey) ||
@@ -104,7 +99,7 @@ export default function Home() {
                   <tr key={user.id}>
                     <td>{user.username}</td>
                     <td>{user.email}</td>
-                    <td>{user.level}</td>
+                    <td>{countTrue(user.level)}</td>
                   </tr>
                 ))}
               {/* {data.map((user) => (
