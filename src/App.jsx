@@ -2,9 +2,33 @@ import { useState, useEffect } from "react";
 import { app } from "./configs/firebase";
 import { onSnapshot, collection } from "firebase/firestore";
 import "./App.css";
+import Graph from "./components/Graph";
 export default function Home() {
   const [data, setData] = useState([]);
-  const [stats, setStats] = useState({ l1: 0, l2: 0, l3: 0, l10: 0 }); // completed level count; eg l3=atleast level 3 completed users
+  const [stats, setStats] = useState({
+    l1: 0,
+    l2: 0,
+    l3: 0,
+    l4: 0,
+    l5: 0,
+    l6: 0,
+    l7: 0,
+    l8: 0,
+    l9: 0,
+    l10: 0,
+  }); // completed level count; eg l3=atleast level 3 completed users
+  // const [statData, setStatData] = useState([
+  //   0,
+  //   0,
+  //   0,
+  //   0,
+  //   0,
+  //   0,
+  //   0,
+  //   0,
+  //   0,
+  //   0,
+  // ]);
   const [searchKey, setSearchKey] = useState("");
 
   useEffect(() => {
@@ -33,14 +57,45 @@ export default function Home() {
 
   useEffect(() => {
     //setting the stat count
-    let statCount1 = 0,
-      statCount10 = 0;
+    let statCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     data.forEach((user) => {
-      if (countTrue(user.level) >= 1) statCount1++;
-      if (countTrue(user.level) >= 10) statCount10++;
+      if (user.level[0] === true) statCount[0]++;
+      if (user.level[1] === true) statCount[1]++;
+      if (user.level[2] === true) statCount[2]++;
+      if (user.level[3] === true) statCount[3]++;
+      if (user.level[4] === true) statCount[4]++;
+      if (user.level[5] === true) statCount[5]++;
+      if (user.level[6] === true) statCount[6]++;
+      if (user.level[7] === true) statCount[7]++;
+      if (user.level[8] === true) statCount[8]++;
+      if (user.level[9] === true) statCount[9]++;
     });
-    setStats({ ...stats, l1: statCount1, l10: statCount10 });
+    setStats({
+      ...stats,
+      l1: statCount[0],
+      l2: statCount[1],
+      l3: statCount[2],
+      l4: statCount[3],
+      l5: statCount[4],
+      l6: statCount[5],
+      l7: statCount[6],
+      l8: statCount[7],
+      l9: statCount[8],
+      l10: statCount[9],
+    });
   }, [data]);
+
+  function convertToPercentage(obj) {
+    //convert data in stats object to percentage
+    const newObj = {};
+    for (const key in obj) {
+      if (Object.hasOwnProperty.call(obj, key)) {
+        newObj[key] = (obj[key] / data.length) * 100;
+      }
+    }
+    return newObj;
+  }
+
   return (
     <>
       <nav>
@@ -58,7 +113,7 @@ export default function Home() {
       </nav>
       <main>
         <div className="tiles-container">
-          <div className="stat-box">
+          {/* <div className="stat-box">
             <div>
               <h1>{data.length}</h1>
               <h2>Total Users</h2>
@@ -75,7 +130,9 @@ export default function Home() {
               <h1>{(stats.l10 / data.length) * 100}%</h1>
               <h2>10 level completed</h2>
             </div>
-          </div>
+          </div> */}
+
+          <Graph statData={convertToPercentage(stats)} />
         </div>
         <h1 className="heading">Presiding officers</h1>
 
@@ -85,7 +142,7 @@ export default function Home() {
               <tr className="table-header">
                 <th>Name</th>
                 <th>Email</th>
-                <th>Level Completed</th>
+                <th>Levels Completed</th>
               </tr>
               {data //filtering data based on search key
                 .filter(
