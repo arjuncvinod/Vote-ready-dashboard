@@ -112,7 +112,7 @@ export default function Home() {
         </div>
       </nav>
       <main>
-        <div className="tiles-container">
+        <div className="graph-container">
           {/* <div className="stat-box">
             <div>
               <h1>{data.length}</h1>
@@ -136,7 +136,7 @@ export default function Home() {
         </div>
         <h1 className="heading">Presiding officers</h1>
 
-        <div className="table-container">
+        <div className="table-container style-3">
           <table>
             <tbody>
               <tr className="table-header">
