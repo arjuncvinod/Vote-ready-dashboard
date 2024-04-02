@@ -40,11 +40,9 @@ nav input {
   border-radius: 20px;
   background-color: white;
   border: none;
-  /* border: 1px solid gray; */
   height: 30px;
   padding: 8px;
   outline: none;
-  /* min-width: 50px; */
   max-width: 40vw;
   width: 100%;
 }
@@ -53,27 +51,19 @@ nav input {
 
 main {
   margin-top: 45px;
-  /* display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 30px; */
 }
 #chart {
   width: 90vw;
-  /* height: 60vw; */
+
 }
 .graph-container {
-  /* max-height: 60vh; */
-  /* background-color: gray; */
   display: flex;
   justify-content: center;
   padding: 10px;
   flex-wrap: wrap;
   gap: 20px;
   padding-top: 20px;
-  /* overflow-x: scroll; */
   width: 95vw;
-  /* height: 50vh; */
 }
 .graph-container::-webkit-scrollbar {
   display: none;
@@ -87,39 +77,6 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-}
-.stat-box {
-  width: 300px;
-  height: 120px;
-  background-color: #dc3745;
-  border-radius: 15px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 10%;
-  color: white;
-  box-shadow: 0px 5px 10px rgb(198, 194, 194);
-}
-.stat-box div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-}
-.stat-box div h1 {
-  margin-bottom: 5px;
-}
-.stat-box p {
-  font-size: 3rem;
-  display: flex;
-  justify-content: center;
-}
-.stat-box:nth-child(2) {
-  background-color: #009d84;
-}
-.stat-box:nth-child(3) {
-  background-color: #0a67c4;
 }
 /* -------------------------stat end--------------------------- */
 .heading {
@@ -176,15 +133,11 @@ body::-webkit-scrollbar-thumb {
 .style-3::-webkit-scrollbar {
   display: none;
 }
-@media only screen and (min-width: 768px) {
-  body {
-    /* overflow: hidden; */
-  }
+@media only screen and (min-width: 768px) {  
   #chart {
     width: 60vw;
   }
   .graph-container {
-    /* max-height: 52vh; */
     overflow: hidden;
     height: unset;
   }
