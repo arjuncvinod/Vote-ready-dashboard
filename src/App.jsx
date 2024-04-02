@@ -32,13 +32,22 @@ export default function Home() {
   const [searchKey, setSearchKey] = useState("");
 
   useEffect(() => {
-    //fetching data from firebase
     const unsubscribe = onSnapshot(collection(app, "users"), (snapshot) => {
       const userData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      setData(userData);
+
+      let sortedData = userData.sort(
+        (a, b) => countTrue(b.level) - countTrue(a.level)
+      );
+
+      // Adding index after sorting
+      sortedData.forEach((item, index) => {
+        item.index = index + 1;
+      });
+
+      setData(sortedData);
     });
 
     return () => unsubscribe();
@@ -140,19 +149,21 @@ export default function Home() {
           <table>
             <tbody>
               <tr className="table-header">
+                <th>Rank</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Levels Completed</th>
               </tr>
-              {data //filtering data based on search key
+              {data
                 .filter(
                   (user) =>
                     user.username.toLowerCase().includes(searchKey) ||
                     user.email.includes(searchKey)
                 )
-                .sort((a, b) => a.username.localeCompare(b.username))
+
                 .map((user) => (
                   <tr key={user.id}>
+                    <td>{user.index}</td>
                     <td>{user.username}</td>
                     <td>{user.email}</td>
                     <td>{countTrue(user.level)}</td>
