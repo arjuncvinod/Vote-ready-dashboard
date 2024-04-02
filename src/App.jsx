@@ -143,7 +143,7 @@ export default function Home() {
 
           <Graph statData={convertToPercentage(stats)} />
         </div>
-        <h1 className="heading">Presiding officers</h1>
+        <h1 className="heading">Presiding Officers</h1>
 
         <div className="table-container style-3">
           <table>
