@@ -99,7 +99,7 @@ export default function Home() {
     const newObj = {};
     for (const key in obj) {
       if (Object.hasOwnProperty.call(obj, key)) {
-        newObj[key] = (obj[key] / data.length) * 100;
+        newObj[key] = ((obj[key] / data.length) * 100).toFixed(2);
       }
     }
     return newObj;
