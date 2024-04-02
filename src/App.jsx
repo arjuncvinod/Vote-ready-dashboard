@@ -3,6 +3,7 @@ import { app } from "./configs/firebase";
 import { onSnapshot, collection } from "firebase/firestore";
 import "./App.css";
 import Graph from "./components/Graph";
+
 export default function Home() {
   const [data, setData] = useState([]);
   const [stats, setStats] = useState({
@@ -16,19 +17,7 @@ export default function Home() {
     l8: 0,
     l9: 0,
     l10: 0,
-  }); // completed level count; eg l3=atleast level 3 completed users
-  // const [statData, setStatData] = useState([
-  //   0,
-  //   0,
-  //   0,
-  //   0,
-  //   0,
-  //   0,
-  //   0,
-  //   0,
-  //   0,
-  //   0,
-  // ]);
+  });
   const [searchKey, setSearchKey] = useState("");
 
   useEffect(() => {
@@ -54,7 +43,8 @@ export default function Home() {
   }, []);
 
   function countTrue(booleanArray) {
-    //function to count the true values in level array
+    // Function to count the true values in the level array
+    if (!booleanArray) return 0; // Handle case where booleanArray is null or undefined
     let count = 0;
     for (let i = 0; i < booleanArray.length; i++) {
       if (booleanArray[i] === true) {
@@ -65,19 +55,13 @@ export default function Home() {
   }
 
   useEffect(() => {
-    //setting the stat count
+    // Setting the stat count
     let statCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     data.forEach((user) => {
-      if (user.level[0] === true) statCount[0]++;
-      if (user.level[1] === true) statCount[1]++;
-      if (user.level[2] === true) statCount[2]++;
-      if (user.level[3] === true) statCount[3]++;
-      if (user.level[4] === true) statCount[4]++;
-      if (user.level[5] === true) statCount[5]++;
-      if (user.level[6] === true) statCount[6]++;
-      if (user.level[7] === true) statCount[7]++;
-      if (user.level[8] === true) statCount[8]++;
-      if (user.level[9] === true) statCount[9]++;
+      const levelsCompleted = user.level || Array(10).fill(false); // Fill with false if user.level is null or undefined
+      for (let i = 0; i < 10; i++) {
+        if (levelsCompleted[i] === true) statCount[i]++;
+      }
     });
     setStats({
       ...stats,
@@ -92,10 +76,10 @@ export default function Home() {
       l9: statCount[8],
       l10: statCount[9],
     });
-  }, [data]);
+  }, [data, stats]); // Include stats as a dependency
 
   function convertToPercentage(obj) {
-    //convert data in stats object to percentage
+    // Convert data in stats object to percentage
     const newObj = {};
     for (const key in obj) {
       if (Object.hasOwnProperty.call(obj, key)) {
@@ -122,25 +106,6 @@ export default function Home() {
       </nav>
       <main>
         <div className="graph-container">
-          {/* <div className="stat-box">
-            <div>
-              <h1>{data.length}</h1>
-              <h2>Total Users</h2>
-            </div>
-          </div>
-          <div className="stat-box">
-            <div>
-              <h1>{(stats.l1 / data.length) * 100}%</h1>
-              <h2>1 level completed</h2>
-            </div>
-          </div>
-          <div className="stat-box">
-            <div>
-              <h1>{(stats.l10 / data.length) * 100}%</h1>
-              <h2>10 level completed</h2>
-            </div>
-          </div> */}
-
           <Graph statData={convertToPercentage(stats)} />
         </div>
         <h1 className="heading">Presiding Officers</h1>
@@ -160,7 +125,6 @@ export default function Home() {
                     user.username.toLowerCase().includes(searchKey) ||
                     user.email.includes(searchKey)
                 )
-
                 .map((user) => (
                   <tr key={user.id}>
                     <td>{user.index}</td>
@@ -169,20 +133,6 @@ export default function Home() {
                     <td>{countTrue(user.level)}</td>
                   </tr>
                 ))}
-              {/* {data.map((user) => (
-                <tr key={user.id}>
-                  <td>{user.username}</td>
-                  <td>{user.email}</td>
-                  <td>{user.level}</td>
-                </tr>
-              ))}
-              {data.map((user) => (
-                <tr key={user.id}>
-                  <td>{user.username}</td>
-                  <td>{user.email}</td>
-                  <td>{user.level}</td>
-                </tr>
-              ))} */}
             </tbody>
           </table>
         </div>
