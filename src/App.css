@@ -52,9 +52,16 @@ nav input {
 main {
   margin-top: 45px;
 }
+.reg-count {
+  color: gray;
+  margin: 1px 3px;
+  padding-top: 10px;
+}
+.reg-count span {
+  color: rgb(24, 119, 242);
+}
 #chart {
   width: 90vw;
-
 }
 .graph-container {
   display: flex;
@@ -88,7 +95,7 @@ main {
   max-height: 40vh;
   display: flex;
   justify-content: center;
-  overflow-y: scroll;
+  overflow: scroll;
   padding: 5px;
   position: relative;
   border-radius: 15px;
@@ -133,12 +140,18 @@ body::-webkit-scrollbar-thumb {
 .style-3::-webkit-scrollbar {
   display: none;
 }
-@media only screen and (min-width: 768px) {  
+@media only screen and (min-width: 768px) {
   #chart {
     width: 60vw;
   }
   .graph-container {
     overflow: hidden;
     height: unset;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .email {
+    display: none;
   }
 }

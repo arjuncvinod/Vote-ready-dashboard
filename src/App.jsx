@@ -105,6 +105,7 @@ export default function Home() {
         </div>
       </nav>
       <main>
+        <h3 className="reg-count">Registered Officers: <span> {data.length}</span></h3>
         <div className="graph-container">
           <Graph statData={convertToPercentage(stats)} />
         </div>
@@ -116,7 +117,7 @@ export default function Home() {
               <tr className="table-header">
                 <th>Rank</th>
                 <th>Name</th>
-                <th>Email</th>
+                <th className="email">Email</th>
                 <th>Levels Completed</th>
               </tr>
               {data
@@ -129,7 +130,7 @@ export default function Home() {
                   <tr key={user.id}>
                     <td>{user.index}</td>
                     <td>{user.username}</td>
-                    <td>{user.email}</td>
+                    <td className="email">{user.email}</td>
                     <td>{countTrue(user.level)}</td>
                   </tr>
                 ))}
