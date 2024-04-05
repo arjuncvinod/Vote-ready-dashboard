@@ -31,18 +31,7 @@ class Graph extends React.Component {
           },
         },
         xaxis: {
-          categories: [
-            "Lvl 1",
-            "Lv1 2",
-            "Lvl 3",
-            "Lvl 4",
-            "Lvl 5",
-            "Lvl 6",
-            "Lvl 7",
-            "Lvl 8",
-            "Lvl 9",
-            "Lvl 10",
-          ],
+          categories: this.generateCategories(this.props.numLevels), // Dynamically generate categories based on the number of levels
           position: "top",
           axisBorder: {
             show: false,
@@ -94,11 +83,7 @@ class Graph extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    // Check if the statData prop has changed
-    // eslint-disable-next-line react/prop-types
     if (prevProps.statData !== this.props.statData) {
-      // Update the series data with new values from props
-      // eslint-disable-next-line react/prop-types
       const seriesData = Object.values(this.props.statData);
       this.setState({
         series: [
@@ -110,6 +95,14 @@ class Graph extends React.Component {
       });
     }
   }
+
+  generateCategories = (numLevels) => {
+    const categories = [];
+    for (let i = 1; i <= numLevels; i++) {
+      categories.push(`Lvl ${i}`);
+    }
+    return categories;
+  };
 
   render() {
     return (

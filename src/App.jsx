@@ -6,18 +6,7 @@ import Graph from "./components/Graph";
 
 export default function Home() {
   const [data, setData] = useState([]);
-  const [stats, setStats] = useState({
-    l1: 0,
-    l2: 0,
-    l3: 0,
-    l4: 0,
-    l5: 0,
-    l6: 0,
-    l7: 0,
-    l8: 0,
-    l9: 0,
-    l10: 0,
-  });
+  const [stats, setStats] = useState({});
   const [searchKey, setSearchKey] = useState("");
 
   useEffect(() => {
@@ -55,35 +44,32 @@ export default function Home() {
   }
 
   useEffect(() => {
-    // Setting the stat count
-    let statCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // Setting the stat count dynamically based on the number of levels
+    const numberOfLevels = data.length > 0 ? data[0].level.length : 0;
+    const statCount = {};
+    for (let i = 1; i <= numberOfLevels; i++) {
+      statCount[`l${i}`] = 0;
+    }
+
     data.forEach((user) => {
-      const levelsCompleted = user.level || Array(10).fill(false); // Fill with false if user.level is null or undefined
-      for (let i = 0; i < 10; i++) {
-        if (levelsCompleted[i] === true) statCount[i]++;
-      }
+      const levelsCompleted = user.level || Array(numberOfLevels).fill(false); // Fill with false if user.level is null or undefined
+      levelsCompleted.forEach((level, index) => {
+        if (level) {
+          statCount[`l${index + 1}`]++;
+        }
+      });
     });
-    setStats({
-      ...stats,
-      l1: statCount[0],
-      l2: statCount[1],
-      l3: statCount[2],
-      l4: statCount[3],
-      l5: statCount[4],
-      l6: statCount[5],
-      l7: statCount[6],
-      l8: statCount[7],
-      l9: statCount[8],
-      l10: statCount[9],
-    });
-  }, [data, stats]); // Include stats as a dependency
+
+    setStats(statCount);
+  }, [data]);
 
   function convertToPercentage(obj) {
     // Convert data in stats object to percentage
     const newObj = {};
+    const totalCount = data.length; // Total number of users
     for (const key in obj) {
       if (Object.hasOwnProperty.call(obj, key)) {
-        newObj[key] = ((obj[key] / data.length) * 100).toFixed(2);
+        newObj[key] = ((obj[key] / totalCount) * 100).toFixed();
       }
     }
     return newObj;
@@ -105,9 +91,14 @@ export default function Home() {
         </div>
       </nav>
       <main>
-        <h3 className="reg-count">Registered Officers: <span> {data.length}</span></h3>
+        <h3 className="reg-count">
+          Registered Officers: <span> {data.length}</span>
+        </h3>
         <div className="graph-container">
-          <Graph statData={convertToPercentage(stats)} />
+          <Graph
+            numLevels={data.length > 0 ? data[0].level.length : 0}
+            statData={convertToPercentage(stats)}
+          />
         </div>
         <h1 className="heading">Presiding Officers</h1>
 
