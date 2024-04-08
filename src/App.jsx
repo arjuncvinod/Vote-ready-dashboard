@@ -44,8 +44,13 @@ export default function Home() {
   }
 
   useEffect(() => {
-    // Setting the stat count dynamically based on the number of levels
-    const numberOfLevels = data.length > 0 ? data[0].level.length : 0;
+    let numberOfLevels = 0;
+  data.forEach((user) => { // loop to find the max no of levels
+    if (user.level && user.level.length > numberOfLevels) {
+      numberOfLevels = user.level.length;
+    }
+  });
+   // Setting the stat count dynamically based on the number of levels
     const statCount = {};
     for (let i = 1; i <= numberOfLevels; i++) {
       statCount[`l${i}`] = 0;
@@ -122,10 +127,10 @@ export default function Home() {
                 .map((user) => (
                   <tr key={user.id}>
                     <td>{user.index}</td>
-                    <td>{user.ID}</td>
+                    <td>{user.ID || "-"}</td>
                     <td>{user.username}</td>
                     <td >{user.email}</td>
-                    <td>{user.Phone}</td>
+                    <td>{user.Phone || "-"}</td>
                     <td>{countTrue(user.level)}</td>
                   </tr>
                 ))}
