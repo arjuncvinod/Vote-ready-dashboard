@@ -107,21 +107,25 @@ export default function Home() {
             <tbody>
               <tr className="table-header">
                 <th>Rank</th>
-                <th>Name</th>
-                <th className="email">Email</th>
+                <th>Id</th>
+                <th className="tname">Name</th>
+                <th>Email</th>
+                <th>Phone</th>
                 <th>Levels Completed</th>
               </tr>
               {data
                 .filter(
                   (user) =>
                     user.username.toLowerCase().includes(searchKey) ||
-                    user.email.includes(searchKey)
+                    user.email.includes(searchKey) || (user.ID && user.ID.includes(searchKey))
                 )
                 .map((user) => (
                   <tr key={user.id}>
                     <td>{user.index}</td>
+                    <td>{user.ID}</td>
                     <td>{user.username}</td>
-                    <td className="email">{user.email}</td>
+                    <td >{user.email}</td>
+                    <td>{user.Phone}</td>
                     <td>{countTrue(user.level)}</td>
                   </tr>
                 ))}

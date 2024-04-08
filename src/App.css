@@ -5,9 +5,10 @@
   font-family: "Poppins", Arial;
 }
 body {
-  height: 100vh;
+  /* height: 100vh; */
   display: flex;
   justify-content: center;
+  padding: 20px;
 }
 
 nav {
@@ -100,11 +101,12 @@ main {
   position: relative;
   border-radius: 15px;
 }
+
 table {
   width: 70vw;
   min-width: 350px;
   border-radius: 15px;
-  overflow: hidden;
+  overflow: hidden;  
 }
 .table-container table td,
 th {
@@ -150,8 +152,32 @@ body::-webkit-scrollbar-thumb {
   }
 }
 
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 650px) {
   .email {
     display: none;
+  }
+  .table-container{
+    width: 95vw;
+    overflow: scroll;
+    justify-content: start;
+  }
+  .tbody{
+    width: 100%;
+    border-radius: 15px;
+  }
+  table{
+    width: 100%;
+    overflow-x: scroll;
+
+  }
+  .tname{
+    min-width: 150px;
+  }
+  th{
+    min-width: 80px;
+
+  }
+  td{
+    padding: 5px;
   }
 }
