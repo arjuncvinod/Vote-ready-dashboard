@@ -121,14 +121,14 @@ export default function Home() {
               {data
                 .filter(
                   (user) =>
-                    user.username.toLowerCase().includes(searchKey) ||
+                    user.Name.toLowerCase().includes(searchKey) ||
                     user.email.includes(searchKey) || (user.ID && user.ID.includes(searchKey))
                 )
                 .map((user) => (
                   <tr key={user.id}>
                     <td>{user.index}</td>
                     <td>{user.ID || "-"}</td>
-                    <td>{user.username}</td>
+                    <td>{user.Name}</td>
                     <td >{user.email}</td>
                     <td>{user.Phone || "-"}</td>
                     <td>{countTrue(user.level)}</td>
