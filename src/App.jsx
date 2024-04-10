@@ -3,15 +3,14 @@ import { app } from "./configs/firebase";
 import { onSnapshot, collection } from "firebase/firestore";
 import "./App.css";
 import Graph from "./components/Graph";
-
+import Constituency from "./assets/ConstituencyData";
 export default function Home() {
   const [data, setData] = useState([]);
   const [stats, setStats] = useState({});
   const [searchKey, setSearchKey] = useState("");
   const [constituencyKey, setConstituencyKey] = useState("");
   const [levelFilter, setLevelFilter] = useState("");
- const [TotalLevels,setTotalLevels]=useState(0) //used in filtering 
-
+  const [TotalLevels, setTotalLevels] = useState(0); //used in filtering
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(app, "users"), (snapshot) => {
@@ -53,7 +52,7 @@ export default function Home() {
       // loop to find the max no of levels
       if (user.level && user.level.length > numberOfLevels) {
         numberOfLevels = user.level.length;
-        setTotalLevels(numberOfLevels)
+        setTotalLevels(numberOfLevels);
       }
     });
     // Setting the stat count dynamically based on the number of levels
@@ -127,17 +126,22 @@ export default function Home() {
                       }}
                       value={searchKey}
                     />
+                    <div>
                     Constituency
                     <select
                       name=""
                       id=""
                       onChange={(e) => setConstituencyKey(e.target.value)}
                     >
-                      <option value="All">All</option>
-                      <option value="Idukki">Idukki</option>
-                      <option value="Kottayam">Kottayam</option>
-                      <option value="Wayanad">Wayanad</option>
+                      <option >All</option>
+                      {Constituency.map((constituency) => ( //data from constituency.js file
+                        <option key={constituency.id} value={constituency.name}>
+                          {constituency.name}
+                        </option>
+                      ))}
                     </select>
+                    </div>
+                    <div>
                     Levels Completed
                     <select
                       name=""
@@ -149,6 +153,7 @@ export default function Home() {
                       <option value="50"> &lt;50%</option>
                       <option value="100">100% </option>
                     </select>
+                    </div>
                   </div>
                 </td>
               </tr>
