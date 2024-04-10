@@ -8,6 +8,10 @@ export default function Home() {
   const [data, setData] = useState([]);
   const [stats, setStats] = useState({});
   const [searchKey, setSearchKey] = useState("");
+  const [constituencyKey, setConstituencyKey] = useState("");
+  const [levelFilter, setLevelFilter] = useState("");
+ const [TotalLevels,setTotalLevels]=useState(0) //used in filtering 
+
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(app, "users"), (snapshot) => {
@@ -45,12 +49,14 @@ export default function Home() {
 
   useEffect(() => {
     let numberOfLevels = 0;
-  data.forEach((user) => { // loop to find the max no of levels
-    if (user.level && user.level.length > numberOfLevels) {
-      numberOfLevels = user.level.length;
-    }
-  });
-   // Setting the stat count dynamically based on the number of levels
+    data.forEach((user) => {
+      // loop to find the max no of levels
+      if (user.level && user.level.length > numberOfLevels) {
+        numberOfLevels = user.level.length;
+        setTotalLevels(numberOfLevels)
+      }
+    });
+    // Setting the stat count dynamically based on the number of levels
     const statCount = {};
     for (let i = 1; i <= numberOfLevels; i++) {
       statCount[`l${i}`] = 0;
@@ -84,7 +90,7 @@ export default function Home() {
     <>
       <nav>
         <a href="">Vote Ready</a>
-        <div className="search-container">
+        {/* <div className="search-container">
           <input
             type="text"
             placeholder="search user"
@@ -93,7 +99,7 @@ export default function Home() {
             }}
             value={searchKey}
           />
-        </div>
+        </div> */}
       </nav>
       <main>
         <h3 className="reg-count">
@@ -110,27 +116,84 @@ export default function Home() {
         <div className="table-container style-3">
           <table>
             <tbody>
+              <tr>
+                <td colSpan={7} className="filters">
+                  <div className="search-container">
+                    <input
+                      type="text"
+                      placeholder="search user"
+                      onChange={(e) => {
+                        setSearchKey(e.target.value.toLowerCase());
+                      }}
+                      value={searchKey}
+                    />
+                    Constituency
+                    <select
+                      name=""
+                      id=""
+                      onChange={(e) => setConstituencyKey(e.target.value)}
+                    >
+                      <option value="All">All</option>
+                      <option value="Idukki">Idukki</option>
+                      <option value="Kottayam">Kottayam</option>
+                      <option value="Wayanad">Wayanad</option>
+                    </select>
+                    Levels Completed
+                    <select
+                      name=""
+                      id=""
+                      onChange={(e) => setLevelFilter(e.target.value)}
+                    >
+                      <option value="">All</option>
+                      <option value="0">0%</option>
+                      <option value="50"> &lt;50%</option>
+                      <option value="100">100% </option>
+                    </select>
+                  </div>
+                </td>
+              </tr>
               <tr className="table-header">
                 <th>Rank</th>
                 <th>Id</th>
                 <th className="tname">Name</th>
                 <th>Email</th>
                 <th>Phone</th>
+                <th>Constituency</th>
                 <th>Levels Completed</th>
               </tr>
               {data
+                .filter((user) =>
+                  constituencyKey === "All"
+                    ? true
+                    : user.Constituency.includes(constituencyKey)
+                )
                 .filter(
                   (user) =>
-                    user.Name.toLowerCase().includes(searchKey) ||
-                    user.email.includes(searchKey) || (user.ID && user.ID.includes(searchKey))
+                    (user.Name &&
+                      user.Name.toLowerCase().includes(searchKey)) ||
+                    user.email.includes(searchKey) ||
+                    (user.ID && user.ID.includes(searchKey))
                 )
+                .filter((user) => {
+                  const completedLevels = countTrue(user.level);
+                  if (levelFilter === "0") {
+                    return completedLevels === 0;
+                  } else if (levelFilter === "50") {
+                    return completedLevels / TotalLevels < 0.5;
+                  } else if (levelFilter === "100") {
+                    return completedLevels === TotalLevels;
+                  } else {
+                    return true;
+                  }
+                })
                 .map((user) => (
                   <tr key={user.id}>
                     <td>{user.index}</td>
                     <td>{user.ID || "-"}</td>
-                    <td>{user.Name}</td>
-                    <td >{user.email}</td>
+                    <td>{user.Name || "-"}</td>
+                    <td>{user.email}</td>
                     <td>{user.Phone || "-"}</td>
+                    <td>{user.Constituency || "-"}</td>
                     <td>{countTrue(user.level)}</td>
                   </tr>
                 ))}
