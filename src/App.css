@@ -95,7 +95,12 @@ border: none;
   /* border-bottom: 1px solid gray; */
   margin-left:5px;
 }
-
+select{
+  height: 35px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+}
 .heading {
   text-align: center;
   color: rgb(24, 119, 242);
