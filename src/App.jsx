@@ -8,11 +8,11 @@ export default function Home() {
   const [data, setData] = useState([]);
   const [stats, setStats] = useState({});
   const [searchKey, setSearchKey] = useState("");
-  const [constituencyKey, setConstituencyKey] = useState("");
+  const [constituencyKey, setConstituencyKey] = useState("All");
   const [levelFilter, setLevelFilter] = useState("");
   const [TotalLevels, setTotalLevels] = useState(0); //used in filtering
 
-  useEffect(() => {
+  useEffect(() => { //fetching data
     const unsubscribe = onSnapshot(collection(app, "users"), (snapshot) => {
       const userData = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -55,7 +55,7 @@ export default function Home() {
         setTotalLevels(numberOfLevels);
       }
     });
-    // Setting the stat count dynamically based on the number of levels
+    // Setting the stat count dynamically based on the number of levels(l1,l2,l3,...);l1=lev 1 completed user's count
     const statCount = {};
     for (let i = 1; i <= numberOfLevels; i++) {
       statCount[`l${i}`] = 0;
@@ -89,16 +89,6 @@ export default function Home() {
     <>
       <nav>
         <a href="">Vote Ready</a>
-        {/* <div className="search-container">
-          <input
-            type="text"
-            placeholder="search user"
-            onChange={(e) => {
-              setSearchKey(e.target.value.toLowerCase());
-            }}
-            value={searchKey}
-          />
-        </div> */}
       </nav>
       <main>
         <h3 className="reg-count">
@@ -127,32 +117,39 @@ export default function Home() {
                       value={searchKey}
                     />
                     <div>
-                    Constituency
-                    <select
-                      name=""
-                      id=""
-                      onChange={(e) => setConstituencyKey(e.target.value)}
-                    >
-                      <option >All</option>
-                      {Constituency.map((constituency) => ( //data from constituency.js file
-                        <option key={constituency.id} value={constituency.name}>
-                          {constituency.name}
-                        </option>
-                      ))}
-                    </select>
+                      Constituency
+                      <select
+                        name=""
+                        id=""
+                        onChange={(e) => setConstituencyKey(e.target.value)}
+                      >
+                        <option>All</option>
+                        {Constituency.map(
+                          (
+                            constituency //data from constituency.js file
+                          ) => (
+                            <option
+                              key={constituency.id}
+                              value={constituency.name}
+                            >
+                              {constituency.name}
+                            </option>
+                          )
+                        )}
+                      </select>
                     </div>
                     <div>
-                    Levels Completed
-                    <select
-                      name=""
-                      id=""
-                      onChange={(e) => setLevelFilter(e.target.value)}
-                    >
-                      <option value="">All</option>
-                      <option value="0">0%</option>
-                      <option value="50"> &lt;50%</option>
-                      <option value="100">100% </option>
-                    </select>
+                      Levels Completed
+                      <select
+                        name=""
+                        id=""
+                        onChange={(e) => setLevelFilter(e.target.value)}
+                      >
+                        <option value="">All</option>
+                        <option value="0">0%</option>
+                        <option value="50"> &lt;50%</option>
+                        <option value="100">100% </option>
+                      </select>
                     </div>
                   </div>
                 </td>
@@ -167,19 +164,20 @@ export default function Home() {
                 <th>Levels Completed</th>
               </tr>
               {data
-                .filter((user) =>
+                .filter((user) =>  //constituency filter
                   constituencyKey === "All"
                     ? true
-                    : user.Constituency.includes(constituencyKey)
+                    : user.Constituency &&
+                      user.Constituency.includes(constituencyKey)
                 )
-                .filter(
+                .filter(         //searching with id,name,email
                   (user) =>
                     (user.Name &&
                       user.Name.toLowerCase().includes(searchKey)) ||
                     user.email.includes(searchKey) ||
                     (user.ID && user.ID.includes(searchKey))
                 )
-                .filter((user) => {
+                .filter((user) => {  //level filter
                   const completedLevels = countTrue(user.level);
                   if (levelFilter === "0") {
                     return completedLevels === 0;
