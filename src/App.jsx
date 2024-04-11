@@ -106,7 +106,7 @@ export default function Home() {
           <table>
             <tbody>
               <tr>
-                <td colSpan={7} className="filters">
+                <td colSpan={6} className="filters">
                   <div className="search-container">
                     <input
                       type="text"
@@ -147,7 +147,8 @@ export default function Home() {
                       >
                         <option value="">All</option>
                         <option value="0">0%</option>
-                        <option value="50"> &lt;50%</option>
+                        <option value="50"> 0%-50%</option>
+                        <option value="50-100">50%-100% </option>
                         <option value="100">100% </option>
                       </select>
                     </div>
@@ -156,7 +157,7 @@ export default function Home() {
               </tr>
               <tr className="table-header">
                 <th>Rank</th>
-                <th>Id</th>
+                {/* <th>Id</th> */}
                 <th className="tname">Name</th>
                 <th>Email</th>
                 <th>Phone</th>
@@ -174,8 +175,7 @@ export default function Home() {
                   (user) =>
                     (user.Name &&
                       user.Name.toLowerCase().includes(searchKey)) ||
-                    user.email.includes(searchKey) ||
-                    (user.ID && user.ID.includes(searchKey))
+                    user.email.includes(searchKey)
                 )
                 .filter((user) => {  //level filter
                   const completedLevels = countTrue(user.level);
@@ -183,7 +183,9 @@ export default function Home() {
                     return completedLevels === 0;
                   } else if (levelFilter === "50") {
                     return completedLevels / TotalLevels < 0.5;
-                  } else if (levelFilter === "100") {
+                  } else if (levelFilter === "50-100") {
+                    return completedLevels > 0.5 * TotalLevels && completedLevels <= TotalLevels;
+                  }else if (levelFilter === "100") {
                     return completedLevels === TotalLevels;
                   } else {
                     return true;
@@ -192,7 +194,6 @@ export default function Home() {
                 .map((user) => (
                   <tr key={user.id}>
                     <td>{user.index}</td>
-                    <td>{user.ID || "-"}</td>
                     <td>{user.Name || "-"}</td>
                     <td>{user.email}</td>
                     <td>{user.Phone || "-"}</td>
