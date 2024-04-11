@@ -111,6 +111,13 @@ select{
   outline: none;
   border-radius: 5px;
 }
+.excel-btn{
+  text-wrap: nowrap;
+  height: 35px;
+  width: 350px;
+  color: white;
+  cursor: pointer;
+}
 .heading {
   text-align: center;
   color: rgb(24, 119, 242);
@@ -198,6 +205,7 @@ body::-webkit-scrollbar-thumb {
   }
   .tname{
     min-width: 150px;
+    text-wrap: nowrap;
   }
   th{
     min-width: 80px;
