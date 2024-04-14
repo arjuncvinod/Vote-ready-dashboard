@@ -183,7 +183,7 @@ export default function Home() {
                         <option value="100">100% </option>
                       </select>
                     </div>
-                    <Button variant="contained" onClick={exportToExcel} className="excel-btn" style={{ backgroundColor: '#04b904',fontSize:'12px',}}>
+                    <Button variant="contained" onClick={exportToExcel} className="excel-btn" style={{ backgroundColor: '#04b904',fontSize:'.6em'}}>
                     Download as Excel
                     </Button>
                   </div>
