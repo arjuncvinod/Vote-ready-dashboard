@@ -208,7 +208,7 @@ export default function Home() {
                   (user) =>
                     (user.Name &&
                       user.Name.toLowerCase().includes(searchKey)) ||
-                    user.email.includes(searchKey)
+                    user.email && user.email.includes(searchKey)
                 )
                 .filter((user) => {
                   const completedLevels = countTrue(user.level);
@@ -230,7 +230,7 @@ export default function Home() {
                 .map((user) => (
                   <tr key={user.id}>
                     <td>{user.index}</td>
-                    <td>{user.Name || "-"}</td>
+                    <td>{user.Name || user.username}</td>
                     <td>{user.email}</td>
                     <td>{user.Phone || "-"}</td>
                     <td>{user.Constituency || "-"}</td>
